@@ -137,24 +137,31 @@ plt.close()
 
 #There is a difference between plots 4 and 4a.
 
-
-
-## START HERE ##
-
-
-
-# What is the frequency content of dataLP?  Hint we let frequencies lower than 10 Hz make it through
+# What is the frequency content of dataLP?  
+# Hint we let frequencies lower than 10 Hz make it through
 # We also let frequencies of greater than 0.01 Hz make it through
 
+dataLP_max = np.amax(dataLP)
+print dataLP_max
+# output = 2.10013666896e-06
+dataLP_min = np.amin(dataLP)
+print dataLP_min
+# output = -2.60303208937e-06
 
+####  Okay we should change focus. We have data in m/s.
 
+## Question - I thought the units were m/s^2.
 
-####  Okay we should change focus  we have data in m/s  
-####  what is the peak to peak acceleration
+####  what is the peak to peak acceleration?
 maxP = max(data)
 minP = min(data)
 print('The max peak is ' + str(maxP))
 print('The min peak is ' + str(minP))
+
+# Output:
+#The max peak is -0.0578991
+#The min peak is -0.129974
+# I think these have units of m/s^2
 
 # Well that looks silly.  We should remove the linear trend because there is an off-set
 data = detrend(data)
@@ -165,8 +172,18 @@ minP = min(data)
 print('The max peak is ' + str(maxP))
 print('The min peak is ' + str(minP))
 
+# Output:
+#The max peak is 0.0364919
+#The min peak is -0.0355832
+# I think these have units of m/s^2
+
 # So the peak to peak would be
 print('P to P: ' + str(abs(minP) + abs(maxP)))
+
+# Output: P to P: 0.0720751
+
+## START HERE ##
+
 
 # What about converting to m/s or m?
 dataVelocity = cumtrapz(data,x=None, dx=0.01)
