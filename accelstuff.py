@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 # Here is some accelerometer data
 f = open('acceldata','r')
 
-
 # Read in the data
 data = []
 for line in f:
@@ -20,6 +19,8 @@ for line in f:
 
 # The data is sampled at 100 Hz.  What is the time length of the file?
 print('Here is the time span: ' + str(float(len(data))/100.) + ' seconds')
+
+# Result - Here is the time span: 855.7 seconds
 
 # Accelerometers output a voltage which is proportional to acceleration
 # the acceleration is then digitized into counts
@@ -32,33 +33,48 @@ data = np.asarray(data,dtype=np.float32)/((2**24)/40.)
 
 print(data)
 
+# Here is the data in volts: 
+#[-0.09621859 -0.0962162  -0.09622097 ..., -0.0949502  -0.09496927
+# -0.09504557]
+
 # Now that your data is in V you want to convert it to m/s^2
 # The sensitivity of your accelerometer is 2g = 20 V what is 
 
 data = data *2.*9.81/20.
 
-# Now plot your data to see what you have
-# Grab a time vector
+print data
 
-# Why are we dividing by 100? Think sample rate
+# Here is the data in m/s^2:
+#[-0.09439044 -0.0943881  -0.09439278 ..., -0.09314615 -0.09316486
+# -0.09323971]
+
+# Now plot your data to see what you have
+# Grab a time vector (t)
+
+# Why are we dividing by 100? Think sample rate.  The data is sampled at 100Hz.
 t=np.arange(len(data))/100.
 
 fig = plt.figure()
 plt.plot(t,data)
-plt.xlabel('Insert the units')
-plt.ylabel('Insert the units')
+plt.xlabel('Time (seconds)')
+plt.ylabel('Acceleration (m/s^2)')
 plt.savefig('AccelExample1.jpg')
 #plt.show()
 
 # Now we want to low-pass the data at 10 Hz
 # Define some parameters so we know what is going on
 order = 2
-fs = 100.0
+fs = 100.0 #fs is the sampling rate, in Hz
 corner = 10.
 
-# If my sampling rate is 100 Hz what is my nyquist?
+# If my sampling rate is 100 Hz what is my nyquist? Nyquist is half the
+# sampling rate, so it's 50 Hz in this case
 nyq = 0.5 * fs
-# Look up this function what kind of filter is this?
+
+# Look up this function. What kind of filter is this?
+# Butterworth Filter - a signal processing filter that aims for  
+#as flat a frequency response as possible in the passband. 
+
 b, a = butter(order, corner/ nyq, btype='low', analog=False)
 
 dataLP = lfilter(b,a,data)
@@ -73,6 +89,8 @@ plt.plot(t,dataLP)
 plt.savefig('AccelExample2.jpg')
 #plt.show()
 plt.close()
+
+## START HERE ##
 
 # Now change the corner to make this a 1 Hz low-pass how about a 0.1 Hz
 # The spike at the front is called filter ringing and is annoying
