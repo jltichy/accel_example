@@ -141,6 +141,7 @@ plt.close()
 # Hint we let frequencies lower than 10 Hz make it through
 # We also let frequencies of greater than 0.01 Hz make it through
 
+# THis section is wrong - these are the peaks, not the frequency content.
 dataLP_max = np.amax(dataLP)
 print dataLP_max
 # output = 2.10013666896e-06
@@ -179,15 +180,14 @@ print('The min peak is ' + str(minP))
 
 # So the peak to peak would be
 print('P to P: ' + str(abs(minP) + abs(maxP)))
-
 # Output: P to P: 0.0720751
-
-## START HERE ##
-
 
 # What about converting to m/s or m?
 dataVelocity = cumtrapz(data,x=None, dx=0.01)
 dataDisplacement = cumtrapz(dataVelocity,x=None, dx=0.01)
+# Cool. That must be how you take an integral in Python.
+
+## START HERE
 
 # Check what cumtrapz returns.  Notice we need a different time vector
 tv = np.arange(len(dataVelocity))/100.
