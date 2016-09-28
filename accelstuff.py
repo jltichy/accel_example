@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter, freqz, detrend, decimate, welch
 from scipy.integrate import cumtrapz
+import math
+import sys
+import matplotlib
+matplotlib.use('Agg') #This is required to run matplotlib on Google Chrome.
+import matplotlib.pyplot as plt
 
 # Here is some accelerometer data
 f = open('acceldata','r')
