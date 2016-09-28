@@ -47,6 +47,7 @@ fig = plt.figure()
 plt.plot(t,data)
 plt.xlabel('Insert the units')
 plt.ylabel('Insert the units')
+plt.savefig('AccelExample1.jpg')
 #plt.show()
 
 # Now we want to low-pass the data at 10 Hz
@@ -69,6 +70,7 @@ plt.subplot(2,1,1)
 plt.plot(t,data)
 plt.subplot(2,1,2)
 plt.plot(t,dataLP)
+plt.savefig('AccelExample2.jpg')
 #plt.show()
 plt.close()
 
@@ -82,6 +84,7 @@ dataLP = lfilter(b,a,data*taper)
 
 fig = plt.figure(1)
 plt.plot(t,dataLP)
+plt.savefig('AccelExample3.jpg')
 #plt.show()
 plt.close()
 
@@ -92,6 +95,7 @@ dataLP = lfilter(b,a,dataLP)
 
 fig = plt.figure(1)
 plt.plot(t,dataLP)
+plt.savefig('AccelExample4.jpg')
 #plt.show()
 plt.close()
 
@@ -133,6 +137,7 @@ plt.subplot(2,1,1)
 plt.plot(tv,dataVelocity)
 plt.subplot(2,1,2)
 plt.plot(td,dataDisplacement)
+plt.savefig('AccelExample5.jpg')
 #plt.show()
 plt.close()
 
@@ -146,6 +151,7 @@ print('Here is dataDec len: ' + str(len(dataDec)))
 t = np.arange(len(dataDec))/10.
 fig = plt.figure(1)
 plt.plot(t,dataDec)
+plt.savefig('AccelExample6.jpg')
 #plt.show()
 plt.close()
 
@@ -166,6 +172,7 @@ dataLP = lfilter(b,a,dataDec)
 
 fig = plt.figure(1)
 plt.plot(t,dataLP)
+plt.savefig('AccelExample7.jpg')
 #plt.show()
 plt.close()
 
@@ -178,12 +185,14 @@ f, P = welch(data, fs, nperseg = 512)
 # The units of P are (m/s^2)^2 /Hz confusing
 fig = plt.figure(1)
 plt.plot(f,P)
+plt.savefig('AccelExample8.jpg')
 #plt.show()
 plt.close()
 
 # Yuck that is hart to read why not plot it on a log scale
 fig = plt.figure(1)
 plt.semilogx(f,P)
+plt.savefig('AccelExample9.jpg')
 #plt.show()
 plt.close()
 
@@ -191,6 +200,7 @@ plt.close()
 PdB = 10.*np.log10(P)
 fig = plt.figure(1)
 plt.semilogx(f,PdB)
+plt.savefig('AccelExample10.jpg')
 #plt.show()
 plt.close()
 
@@ -200,6 +210,7 @@ fLP, PLP = welch(dataLP,10., nperseg = 512)
 fig = plt.figure(1)
 plt.semilogx(f,PdB)
 plt.semilogx(fLP, 10*np.log10(PLP))
+plt.savefig('AccelExample11.jpg')
 #plt.show()
 plt.close()
 
@@ -213,6 +224,7 @@ fV, PV = welch(dataVelocity, 100., nperseg = 512)
 fig = plt.figure(1)
 plt.semilogx(fV, 10*np.log10(PV))
 plt.semilogx(f,PdB)
+plt.savefig('AccelExample12.jpg')
 #plt.show()
 plt.close()
 
@@ -223,6 +235,7 @@ PA = 10.*np.log10(PV*(2*np.pi*fV)**2)
 fig = plt.figure(1)
 plt.semilogx(fV,PA)
 plt.semilogx(f,PdB)
+plt.savefig('AccelExample13.jpg')
 plt.show()
 plt.close()
 
