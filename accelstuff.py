@@ -90,11 +90,21 @@ plt.savefig('AccelExample2.jpg')
 #plt.show()
 plt.close()
 
-## START HERE ##
-
 # Now change the corner to make this a 1 Hz low-pass how about a 0.1 Hz
 # The spike at the front is called filter ringing and is annoying
 # We can get rid of that by applying a taper
+
+corner2 = 0.1
+b, a = butter(order, corner2/ nyq, btype='low', analog=False)
+dataLP = lfilter(b,a,data)
+fig = plt.figure(1)
+plt.subplot(2,1,1)
+plt.plot(t,data)
+plt.subplot(2,1,2)
+plt.plot(t,dataLP)
+plt.savefig('AccelExample2a.jpg')
+#plt.show()
+plt.close()
 
 taper = np.hanning(len(data))
 
@@ -110,12 +120,28 @@ plt.close()
 cornerHP = 0.01
 b,a = butter(order, corner/nyq, btype='high', analog=False)
 dataLP = lfilter(b,a,dataLP)
-
 fig = plt.figure(1)
 plt.plot(t,dataLP)
 plt.savefig('AccelExample4.jpg')
 #plt.show()
 plt.close()
+
+#Why didn't the above code use cornerHP?  Let's try it here:
+b,a = butter(order, cornerHP/nyq, btype='high', analog=False)
+dataLP = lfilter(b,a,dataLP)
+fig = plt.figure(1)
+plt.plot(t,dataLP)
+plt.savefig('AccelExample4a.jpg')
+#plt.show()
+plt.close()
+
+#There is a difference between plots 4 and 4a.
+
+
+
+## START HERE ##
+
+
 
 # What is the frequency content of dataLP?  Hint we let frequencies lower than 10 Hz make it through
 # We also let frequencies of greater than 0.01 Hz make it through
