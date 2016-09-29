@@ -276,6 +276,9 @@ plt.savefig('AccelExample8.jpg')
 #plt.show()
 plt.close()
 
+# These units are messy, so if we use Hz=1/sec, we can simplify the units to
+# m^2/s^3 but maybe this doesn't really make sense either.
+
 # Yuck that is hard to read why not plot it on a log scale
 fig = plt.figure(1)
 plt.semilogx(f,P)
@@ -296,7 +299,7 @@ fLP, PLP = welch(dataLP,10., nperseg = 512)
 
 fig = plt.figure(1)
 plt.semilogx(f,PdB)
-plt.semilogx(fLP, 10*np.log10(PLP))
+plt.semilogx(fLP, 10*np.log10(PLP)) #convert to decibels here.
 plt.savefig('AccelExample11.jpg')
 #plt.show()
 plt.close()
@@ -307,17 +310,19 @@ plt.close()
 # PdB is the PSD in decibels of the original data
 
 # Okay one last exercise.  What happens when we compute the PSD of our velocity trace?
-# If we calculate the velocity signal's power intensity in the frequency domain, my 
-# initial thought is that we'd get a straight line, since the units will both be 
-# "per second," but I know this isn't correct.  Right, that doesn't make sense.
-
-# Adam says that you get units of (m/s)^2/Hz if you take the PSD of velocity data.
+# You get units of (m/s)^2/Hz if you take the PSD of velocity data.
 
 fV, PV = welch(dataVelocity, 100., nperseg = 512)
 
 # What are the units of PV?  I'm not sure about this either.
 # Adam says that you get units of (m/s)^2/Hz if you take the PSD of velocity data.
 # Side note - the units for the PSD of acceration are (m/s^2)^2/Hz
+
+# The PSD units of velocity data are (m/2)^2/Hz, so if we substitute 1/s for Hz,
+# we get m^2/s
+
+# For an exercise, let's see what happens if we were to take the PSD of displacement
+# data.  I think it would be m^2*s.  Ask Adam if this is right.
 
 # Units: scaling : { ‘density’, ‘spectrum’ }, optional
 # Selects between computing the power spectral density (‘density’) where Pxx has 
@@ -327,7 +332,7 @@ fV, PV = welch(dataVelocity, 100., nperseg = 512)
 
 
 fig = plt.figure(1)
-plt.semilogx(fV, 10*np.log10(PV))
+plt.semilogx(fV, 10*np.log10(PV)) #Here we convert to decibels again.
 plt.semilogx(f,PdB)
 plt.savefig('AccelExample12.jpg')
 #plt.show()
@@ -359,3 +364,7 @@ plt.close()
 # This is a bit different from the FFFFT
 
 # We square the multiplier because it is acceleration, not velocity.
+
+#End Note:
+# The units of angular frequency for acceleration data are (2*pi*m)^2/s^4
+# while the units of angular frequency for verlocity data are (2*pi*m/s)^2
