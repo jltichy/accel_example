@@ -229,7 +229,7 @@ plt.close()
 
 # If I wanted to low-pass dataDec what would I need to change in my filter parameters?
 # Answer - 
-corner_dec = 0.01
+corner_dec = 0.1
 b,a = butter(order, corner_dec/nyq, btype='high', analog=False)
 dataDec = lfilter(b,a,dataDec)
 fig = plt.figure(1)
