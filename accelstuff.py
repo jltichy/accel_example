@@ -276,7 +276,7 @@ plt.savefig('AccelExample8.jpg')
 #plt.show()
 plt.close()
 
-# Yuck that is hart to read why not plot it on a log scale
+# Yuck that is hard to read why not plot it on a log scale
 fig = plt.figure(1)
 plt.semilogx(f,P)
 plt.savefig('AccelExample9.jpg')
@@ -303,17 +303,30 @@ plt.close()
 
 # Which is PLP and which is PdB?  Hint one of them should not have as much power past 10Hz 
 # Why do they have different frequencies?
-
-## Start here.
+# PLP is the PSD of the low pass data
+# PdB is the PSD in decibels of the original data
 
 # Okay one last exercise.  What happens when we compute the PSD of our velocity trace?
 # If we calculate the velocity signal's power intensity in the frequency domain, my 
 # initial thought is that we'd get a straight line, since the units will both be 
 # "per second," but I know this isn't correct.  Right, that doesn't make sense.
 
+# Adam says that you get units of (m/s)^2/Hz if you take the PSD of velocity data.
+
 fV, PV = welch(dataVelocity, 100., nperseg = 512)
 
 # What are the units of PV?  I'm not sure about this either.
+# Adam says that you get units of (m/s)^2/Hz if you take the PSD of velocity data.
+# Side note - the units for the PSD of acceration are (m/s^2)^2/Hz
+
+# Units: scaling : { ‘density’, ‘spectrum’ }, optional
+# Selects between computing the power spectral density (‘density’) where Pxx has 
+# units of V**2/Hz if x is measured in V and computing the power spectrum 
+# (‘spectrum’) where Pxx has units of V**2 if x is measured in V. 
+# Defaults to ‘density’.
+# all from url: http://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.signal.welch.html
+
+
 fig = plt.figure(1)
 plt.semilogx(fV, 10*np.log10(PV))
 plt.semilogx(f,PdB)
@@ -324,7 +337,11 @@ plt.close()
 # What happens if we multiply PV by omega^2=(2*pi*f)^2?
 PA = 10.*np.log10(PV*(2*np.pi*fV)**2)
 
+#units = (2pi*m/s)^2
+
 # What are the units of PA?  Why are these so similar?  
+# so similar to what?
+
 fig = plt.figure(1)
 plt.semilogx(fV,PA)
 plt.semilogx(f,PdB)
