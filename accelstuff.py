@@ -306,10 +306,14 @@ plt.close()
 
 ## Start here.
 
-# Okay one last exercise  What happens when we compute the PSD of our velocity trace?
+# Okay one last exercise.  What happens when we compute the PSD of our velocity trace?
+# If we calculate the velocity signal's power intensity in the frequency domain, my 
+# initial thought is that we'd get a straight line, since the units will both be 
+# "per second," but I know this isn't correct.  Right, that doesn't make sense.
+
 fV, PV = welch(dataVelocity, 100., nperseg = 512)
 
-# What are the units of PV?
+# What are the units of PV?  I'm not sure about this either.
 fig = plt.figure(1)
 plt.semilogx(fV, 10*np.log10(PV))
 plt.semilogx(f,PdB)
