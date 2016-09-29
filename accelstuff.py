@@ -222,8 +222,21 @@ plt.savefig('AccelExample6.jpg')
 #plt.show()
 plt.close()
 
+
+## Ask Adam about this part - Is the idea to low-pass dataDec (as the acceleration), or the displacement or velocity?
+
+
+
 # If I wanted to low-pass dataDec what would I need to change in my filter parameters?
 # Answer - 
+corner_dec = 0.01
+b,a = butter(order, corner_dec/nyq, btype='high', analog=False)
+dataDec = lfilter(b,a,dataDec)
+fig = plt.figure(1)
+plt.plot(t,dataDec)
+plt.savefig('AccelExample6a.jpg')
+#plt.show()
+plt.close()
 
 
 # Now we want to low-pass the data at 1 Hz
@@ -234,10 +247,13 @@ corner = 1.
 
 # If my sampling rate is 10 Hz what is my nyquist?  Notice we decimated the data
 nyq = 0.5 * fs
+#Nyquist becomes 5
+
 # Look up this function what kind of filter is this?
 b, a = butter(order, corner/ nyq, btype='low', analog=False)
 
 dataLP = lfilter(b,a,dataDec)
+#lfilter is a low pass butterworth filter
 
 fig = plt.figure(1)
 plt.plot(t,dataLP)
@@ -250,6 +266,8 @@ plt.close()
 # f is the frequency vector and P is the power
 fs= 100.
 f, P = welch(data, fs, nperseg = 512)
+#welch's method computer an esimate of the power spectral density by dividing
+#the data into overlapping segments.
 
 # The units of P are (m/s^2)^2 /Hz confusing
 fig = plt.figure(1)
@@ -286,6 +304,8 @@ plt.close()
 # Which is PLP and which is PdB?  Hint one of them should not have as much power past 10Hz 
 # Why do they have different frequencies?
 
+## Start here.
+
 # Okay one last exercise  What happens when we compute the PSD of our velocity trace?
 fV, PV = welch(dataVelocity, 100., nperseg = 512)
 
@@ -313,8 +333,3 @@ plt.close()
 
 # Why do we do (2*pi*f)^2 and not just (2*pi*f)?  Look at what Welch outputs
 # This is a bit different from the FFFFT
-
-
-
-
-
