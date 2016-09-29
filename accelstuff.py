@@ -323,7 +323,6 @@ fV, PV = welch(dataVelocity, 100., nperseg = 512)
 # Selects between computing the power spectral density (‘density’) where Pxx has 
 # units of V**2/Hz if x is measured in V and computing the power spectrum 
 # (‘spectrum’) where Pxx has units of V**2 if x is measured in V. 
-# Defaults to ‘density’.
 # all from url: http://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.signal.welch.html
 
 
@@ -336,11 +335,15 @@ plt.close()
 
 # What happens if we multiply PV by omega^2=(2*pi*f)^2?
 PA = 10.*np.log10(PV*(2*np.pi*fV)**2)
-
+#we get angular frequency.  This gives the normalized frequency for PSD.
+# The values are a little more familiar and the data is easier to understand.
+# It's a convention to see how fast something is spinning.
 #units = (2pi*m/s)^2
 
 # What are the units of PA?  Why are these so similar?  
 # so similar to what?
+
+#units = (2pi*m/s)^2
 
 fig = plt.figure(1)
 plt.semilogx(fV,PA)
@@ -354,3 +357,5 @@ plt.close()
 
 # Why do we do (2*pi*f)^2 and not just (2*pi*f)?  Look at what Welch outputs
 # This is a bit different from the FFFFT
+
+# We square the multiplier because it is acceleration, not velocity.
