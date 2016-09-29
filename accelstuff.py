@@ -187,9 +187,9 @@ dataVelocity = cumtrapz(data,x=None, dx=0.01)
 dataDisplacement = cumtrapz(dataVelocity,x=None, dx=0.01)
 # Cool. That must be how you take an integral in Python.
 
-## START HERE
-
-# Check what cumtrapz returns.  Notice we need a different time vector
+# Check what cumtrapz returns.  Notice we need a different time vector.
+# cumtrapz computes an approximation of the cumulative integral of 
+#Y via the trapezoidal method with unit spacing
 tv = np.arange(len(dataVelocity))/100.
 td = np.arange(len(dataDisplacement))/100.
 
@@ -205,10 +205,16 @@ plt.close()
 # Note most accelerometers don't integrate to displacement well because of noise
 
 # What happens to the length and the Nyquist when we decimate by a factor of 10?
+#decimate essentially means divide by, so if our sampling frequency is 100 and
+#we decimate by 10, then our sampling frequency is 10
+#When we decimate by 10, the Nyquist then becomes 5 Hz.
 dataDec = decimate(data,10)
 print('Here is dataDec len: ' + str(len(dataDec))) 
+#Output: Here is dataDec len: 8557
 
 # Why do we need a new time vector?
+#Since we are taking 1/10 of the measurements, we need a new time vector that
+#is also 1/10 of the original time vector.
 t = np.arange(len(dataDec))/10.
 fig = plt.figure(1)
 plt.plot(t,dataDec)
@@ -217,6 +223,8 @@ plt.savefig('AccelExample6.jpg')
 plt.close()
 
 # If I wanted to low-pass dataDec what would I need to change in my filter parameters?
+# Answer - 
+
 
 # Now we want to low-pass the data at 1 Hz
 # Define some parameters so we know what is going on
