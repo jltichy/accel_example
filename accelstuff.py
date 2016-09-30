@@ -77,14 +77,19 @@ plt.plot(t,data)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
 plt.savefig('AccelExample1.jpg')
+plt.close()
 
 # Now we want to low-pass the data at 10 Hz.
 
 # Define some parameters so we know what is going on.
+
 order = 2 # Order is the order of the filter - What does this mean??
 # A second order filter decreases at -12 dB per octave (for every factor of 2
-# in the frequency, we lose 12 dB)
+# in the frequency, we lose 12 dB).  The higher the order, the steeper the data
+# will drop off.
+
 fs = 100.0 # fs is the sampling rate, in Hz
+
 corner = 10. # corner is the frequency cut off, so we will keep all data less
 # than 10 Hz and everything greater than 10 Hz will be attenuated.
 
@@ -93,14 +98,21 @@ corner = 10. # corner is the frequency cut off, so we will keep all data less
 nyq = 0.5 * fs
 
 # Look up this function. What kind of filter is this?
+
 # Butterworth Filter - a signal processing filter that aims for  
-#as flat a frequency response as possible in the passband. 
+# as flat a frequency response as possible in the passband. 
 b, a = butter(order, corner/nyq, btype='low', analog=False)
+
 # b is the numerator and a is the denominator of the polynomials in the filter.
 # we do corner/nyq as 10/50 because these are the critical frequencies.
 # btype = 'low' tells the filter to do low pass 
-# analog = False 
+# analog = False means that we want the digital filter, not an analog filter.
+# Digital filters perform better than analog.
 
+# Let's calculate the low pass data.  lfilter is the infinite impulse response
+# filter (most efficient type) that takes in b, the numerator coefficient
+# vector in the 1-D sequence, and a, the denominator coefficient of the 1-D 
+# sequence.  data is our accelerometer data in m/s^2
 dataLP = lfilter(b,a,data)
 
 # Now plot both the low-pass and the regular data
@@ -108,76 +120,80 @@ dataLP = lfilter(b,a,data)
 fig = plt.figure(1)
 plt.subplot(2,1,1)
 plt.plot(t,data)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Acceleration (m/s^2)')
 plt.subplot(2,1,2)
 plt.plot(t,dataLP)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Acceleration (m/s^2)')
 plt.savefig('AccelExample2.jpg')
-#plt.show()
 plt.close()
 
-# Now change the corner to make this a 1 Hz low-pass how about a 0.1 Hz
-# The spike at the front is called filter ringing and is annoying
-# We can get rid of that by applying a taper
+# It looks like the difference between these two plots is that the dataLP
+# plot looks squished, but it seems like that data is the same...Yes, that is
+# the point of a low pass filter.  The lower frequencies came through and the
+# higher ones got attenuated.
 
+# Now change the corner to make this a 0.1 Hz low pass filter.
 corner2 = 0.1
-b, a = butter(order, corner2/ nyq, btype='low', analog=False)
+b, a = butter(order, corner2/nyq, btype='low', analog=False)
 dataLP = lfilter(b,a,data)
 fig = plt.figure(1)
 plt.subplot(2,1,1)
 plt.plot(t,data)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Acceleration (m/s^2)')
 plt.subplot(2,1,2)
 plt.plot(t,dataLP)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Acceleration (m/s^2)')
 plt.savefig('AccelExample2a.jpg')
-#plt.show()
 plt.close()
+# Even more high frequency data has been attenuated and now we are looking at
+# only very low frequencies.
 
+# The spike at the front is called filter ringing and is annoying.
+# We can get rid of that by applying a taper.
 taper = np.hanning(len(data))
+# The Hanning window is used to select a subset of samples.  It minimizes 
+# aliasing (distortion).
 
 dataLP = lfilter(b,a,data*taper)
 
 fig = plt.figure(1)
 plt.plot(t,dataLP)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Acceleration (m/s^2)')
 plt.savefig('AccelExample3.jpg')
-#plt.show()
 plt.close()
 
-# Well now the data is even more ugly, but we can fix this by applying a high-pass
+# Well now the data is even more ugly, but we can fix this by applying a high
+# pass filter.  Now everything below 0.1 Hz will go through, as well as every-
+# thing above 0.01 Hz.  The range is now between 0.01 and 0.1 Hz.
 cornerHP = 0.01
-b,a = butter(order, corner/nyq, btype='high', analog=False)
-dataLP = lfilter(b,a,dataLP)
-fig = plt.figure(1)
-plt.plot(t,dataLP)
-plt.savefig('AccelExample4.jpg')
-#plt.show()
-plt.close()
-
-#Why didn't the above code use cornerHP?  Let's try it here:
 b,a = butter(order, cornerHP/nyq, btype='high', analog=False)
 dataLP = lfilter(b,a,dataLP)
 fig = plt.figure(1)
 plt.plot(t,dataLP)
-plt.savefig('AccelExample4a.jpg')
-#plt.show()
+plt.xlabel('Time (seconds)')
+plt.ylabel('Acceleration (m/s^2)')
+plt.savefig('AccelExample4.jpg')
 plt.close()
 
-#There is a difference between plots 4 and 4a.
-
 # What is the frequency content of dataLP?  
-# Hint we let frequencies lower than 10 Hz make it through
-# We also let frequencies of greater than 0.01 Hz make it through
+# Hint: We let frequencies lower than 10 Hz make it through.
+# We also let frequencies of greater than 0.01 Hz make it through.
 
-# THis section is wrong - these are the peaks, not the frequency content.
-dataLP_max = np.amax(dataLP)
-print dataLP_max
-# output = 2.10013666896e-06
-dataLP_min = np.amin(dataLP)
-print dataLP_min
-# output = -2.60303208937e-06
+# The range is now between 0.01 and 0.1 Hz.
 
-####  Okay we should change focus. We have data in m/s.
+
+
+####  Okay we should change focus. Let's go back to the original data.
 
 ## Question - I thought the units were m/s^2.
 
-####  what is the peak to peak acceleration?
+####  What is the peak to peak acceleration? Note that we are going back to the
+# original data.
 maxP = max(data)
 minP = min(data)
 print('The max peak is ' + str(maxP))
@@ -188,10 +204,12 @@ print('The min peak is ' + str(minP))
 #The min peak is -0.129974
 # I think these have units of m/s^2
 
-# Well that looks silly.  We should remove the linear trend because there is an off-set
+# Well that looks silly (both the min and max peaks are negative).  
+# We should remove the linear trend because there is an off-set.
 data = detrend(data)
+# detrend removes the mean value or linear trend from a vector or matrix
 
-# Okay find the min and max again
+# Okay find the min and max again.
 maxP = max(data)
 minP = min(data)
 print('The max peak is ' + str(maxP))
