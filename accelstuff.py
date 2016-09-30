@@ -184,15 +184,13 @@ plt.close()
 # Hint: We let frequencies lower than 10 Hz make it through.
 # We also let frequencies of greater than 0.01 Hz make it through.
 
-# The range is now between 0.01 and 0.1 Hz.
+# The range is now between 0.01 and 0.1 Hz.  This is the band-pass!
 
 
 
 ####  Okay we should change focus. Let's go back to the original data.
 
-## Question - I thought the units were m/s^2.
-
-####  What is the peak to peak acceleration? Note that we are going back to the
+# What is the peak to peak acceleration? Note that we are going back to the
 # original data.
 maxP = max(data)
 minP = min(data)
@@ -224,10 +222,18 @@ print('The min peak is ' + str(minP))
 print('P to P: ' + str(abs(minP) + abs(maxP)))
 # Output: P to P: 0.0720751
 
-# What about converting to m/s or m?
+# What about converting to m/s or m?  The function cumtrapz calculates the 
+# area under the curve.  The area under the acceleration curve, using the 
+# trapezoidal rule, is velocity, and the area under the velocity curve, using 
+# the trapezoidal rule, is displacment.
 dataVelocity = cumtrapz(data,x=None, dx=0.01)
 dataDisplacement = cumtrapz(dataVelocity,x=None, dx=0.01)
 # Cool. That must be how you take an integral in Python.
+# x=None means that the function should use spacing dx between consecutive
+# elements of "data".  dx is then defined to be 0.01.
+
+## START HERE.
+
 
 # Check what cumtrapz returns.  Notice we need a different time vector.
 # cumtrapz computes an approximation of the cumulative integral of 
