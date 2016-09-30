@@ -10,46 +10,64 @@ matplotlib.use('Agg') #This is required to run matplotlib on Google Chrome.
 import matplotlib.pyplot as plt
 
 # Here is some accelerometer data
-f = open('acceldata','r')
+f = open('acceldata','r') # The 'r' means read the file.
 
-# Read in the data
-data = []
-for line in f:
-    data.append(int(line))
+# Read in the data as a list.
+data = []   # data is an empty list
+for line in f: # for each line in data, append a string of information.
+    data.append(int(line)) # The data came in as a string and we will need to
+    # convert it into integers.  However, as we'll see below, we may not
+    # necessarily only have integers when we convert our counts to acceleration.
+    # Therefore, we will eventually need floats (data types that can have
+    # decimals).
 
 # The data is sampled at 100 Hz.  What is the time length of the file?
+# One Hz is 1/sec, so that means we are taking 100 samples every second.
 print('Here is the time span: ' + str(float(len(data))/100.) + ' seconds')
 
 # Result - Here is the time span: 855.7 seconds
+# at 100 samples per second, that's 85,570 samples.
 
-# Accelerometers output a voltage which is proportional to acceleration
-# the acceleration is then digitized into counts
+# Let's print the number of samples:
+print('There are ' + str(float(len(data))) + ' samples.')
+# Result - There are 85570.0 samples.
 
-# If the digitizer is a 24 bit digitizer with a 40 Volt peak to peak range
-# then the sensitivity is 2^24/40 which is counts/V  your data is in counts
-# convert it to Volts
+# Accelerometers output a voltage which is proportional to acceleration.
+# The acceleration is then digitized into counts.
+
+# If the digitizer is a 24 bit digitizer with a 40 Volt peak to peak range,
+# then the sensitivity is 2^24/40 which is counts/V.
+# Your data is in counts. Convert it to Volts.
 
 data = np.asarray(data,dtype=np.float32)/((2**24)/40.)
+# Another way to do the conversion is like this:
+# data = np.asarray(data,dtype=np.float32)*40/(2**24) because 2**24 counts = 40V
+# and we are converting from counts to volts.  Again it's these voltages that
+# are proportional to acceleration.
+# float32 is the type of data (it's 32 bit data), meaning that one bit assigns
+# the sign, 8 bits assign the exponent, and 23 bits are for the mantissa (sig figs)
+# 32 bits is all the precision we need.
 
-print(data)
+print(data) # Notice that these are float32 data types, with decimal places
 
 # Here is the data in volts: 
 #[-0.09621859 -0.0962162  -0.09622097 ..., -0.0949502  -0.09496927
 # -0.09504557]
 
-# Now that your data is in V you want to convert it to m/s^2
-# The sensitivity of your accelerometer is 2g = 20 V what is 
+# Now that your data is in V you want to convert it to m/s^2 to get acceleration.
+# The sensitivity of your accelerometer is 2g = 20 V.  g is gravity, so we
+# multiply by 2 and gravity and divide by 20 to convert to acceleration.
 
 data = data *2.*9.81/20.
 
 print data
 
-# Here is the data in m/s^2:
+# Here is the data in m/s^2 (acceleration):
 #[-0.09439044 -0.0943881  -0.09439278 ..., -0.09314615 -0.09316486
 # -0.09323971]
 
-# Now plot your data to see what you have
-# Grab a time vector (t)
+# Now plot your data to see what you have.
+# Grab a time vector (t).
 
 # Why are we dividing by 100? Think sample rate.  The data is sampled at 100Hz.
 t=np.arange(len(data))/100.
@@ -59,23 +77,29 @@ plt.plot(t,data)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
 plt.savefig('AccelExample1.jpg')
-#plt.show()
 
-# Now we want to low-pass the data at 10 Hz
-# Define some parameters so we know what is going on
-order = 2
-fs = 100.0 #fs is the sampling rate, in Hz
-corner = 10.
+# Now we want to low-pass the data at 10 Hz.
 
-# If my sampling rate is 100 Hz what is my nyquist? Nyquist is half the
+# Define some parameters so we know what is going on.
+order = 2 # Order is the order of the filter - What does this mean??
+# A second order filter decreases at -12 dB per octave (for every factor of 2
+# in the frequency, we lose 12 dB)
+fs = 100.0 # fs is the sampling rate, in Hz
+corner = 10. # corner is the frequency cut off, so we will keep all data less
+# than 10 Hz and everything greater than 10 Hz will be attenuated.
+
+# If my sampling rate is 100 Hz, what is my nyquist? Nyquist is half the
 # sampling rate, so it's 50 Hz in this case
 nyq = 0.5 * fs
 
 # Look up this function. What kind of filter is this?
 # Butterworth Filter - a signal processing filter that aims for  
 #as flat a frequency response as possible in the passband. 
-
-b, a = butter(order, corner/ nyq, btype='low', analog=False)
+b, a = butter(order, corner/nyq, btype='low', analog=False)
+# b is the numerator and a is the denominator of the polynomials in the filter.
+# we do corner/nyq as 10/50 because these are the critical frequencies.
+# btype = 'low' tells the filter to do low pass 
+# analog = False 
 
 dataLP = lfilter(b,a,data)
 
@@ -324,12 +348,7 @@ fV, PV = welch(dataVelocity, 100., nperseg = 512)
 # For an exercise, let's see what happens if we were to take the PSD of displacement
 # data.  I think it would be m^2*s.  Ask Adam if this is right.
 
-# Units: scaling : { ‘density’, ‘spectrum’ }, optional
-# Selects between computing the power spectral density (‘density’) where Pxx has 
-# units of V**2/Hz if x is measured in V and computing the power spectrum 
-# (‘spectrum’) where Pxx has units of V**2 if x is measured in V. 
-# all from url: http://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.signal.welch.html
-
+# Units: url: http://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.signal.welch.html
 
 fig = plt.figure(1)
 plt.semilogx(fV, 10*np.log10(PV)) #Here we convert to decibels again.
