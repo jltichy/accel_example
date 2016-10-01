@@ -76,6 +76,7 @@ fig = plt.figure()
 plt.plot(t,data)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
+plt.title('Acceleration vs. Time')
 plt.savefig('AccelExample1.jpg')
 plt.close()
 
@@ -120,12 +121,13 @@ dataLP = lfilter(b,a,data)
 fig = plt.figure(1)
 plt.subplot(2,1,1)
 plt.plot(t,data)
-plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
+plt.title('Acceleration vs. Time')
 plt.subplot(2,1,2)
 plt.plot(t,dataLP)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
+plt.title('Low Pass Acceleration at Corner of 10 Hz. vs. Time')
 plt.savefig('AccelExample2.jpg')
 plt.close()
 
@@ -141,12 +143,13 @@ dataLP = lfilter(b,a,data)
 fig = plt.figure(1)
 plt.subplot(2,1,1)
 plt.plot(t,data)
-plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
+plt.title('Acceleration vs. Time')
 plt.subplot(2,1,2)
 plt.plot(t,dataLP)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
+plt.title('Low Pass Acceleration at Corner of 0.1 Hz. vs. Time')
 plt.savefig('AccelExample2a.jpg')
 plt.close()
 # Even more high frequency data has been attenuated and now we are looking at
@@ -164,6 +167,7 @@ fig = plt.figure(1)
 plt.plot(t,dataLP)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
+plt.title('Low Pass Acceleration at Corner of 0.1 Hz. with Hanning Window')
 plt.savefig('AccelExample3.jpg')
 plt.close()
 
@@ -177,6 +181,7 @@ fig = plt.figure(1)
 plt.plot(t,dataLP)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Acceleration (m/s^2)')
+plt.title('Band Pass Acceleration between 0.1 Hz and 10 Hz with Hanning Window')
 plt.savefig('AccelExample4.jpg')
 plt.close()
 
@@ -245,6 +250,7 @@ plt.subplot(2,1,1)
 plt.plot(tv,dataVelocity)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Velocity (m/s)')
+plt.title('Velocity and Displacement using cumptraz Integration')
 plt.subplot(2,1,2)
 plt.plot(td,dataDisplacement)
 plt.xlabel('Time (seconds)')
@@ -275,6 +281,7 @@ fig = plt.figure(1)
 plt.plot(t,dataDec)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Decimated Acceleration (m/s^2)')
+plt.title('Decimated Acceleration')
 plt.savefig('AccelExample6.jpg')
 plt.close()
 
@@ -291,32 +298,50 @@ plt.ylabel('Decimated Acceleration (m/s^2)')
 plt.savefig('AccelExample6a.jpg')
 plt.close()
 
-## START HERE. - REMEMBER TO ADD TITLES TO ALL ABOVE PLOTS.
+# Let's create a figure that shows the difference between the decimated data
+# and the low pass decimated data.
+fig = plt.figure(1)
+plt.subplot(2,1,1)
+plt.plot(t,dataDec)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Decimated Acceleration (m/s^2)')
+plt.title('Decimated Accel and Decimated Accel with Low Pass Corner of 0.1 Hz')
+plt.subplot(2,1,2)
+plt.plot(t,dataDec)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Decimated Acceleration (m/s^2)')
+plt.savefig('AccelExample6b.jpg')
+plt.close()
 
-# Now we want to low-pass the data at 1 Hz
-# Define some parameters so we know what is going on
+# Now we want to low-pass the data at 1 Hz.
+# Define some parameters so we know what is going on.
 order = 2
 fs = 10.0
 corner = 1.
 
-# If my sampling rate is 10 Hz what is my nyquist?  Notice we decimated the data
+# If my sampling rate is 10 Hz, what is my nyquist?  Notice we decimated the data.
 nyq = 0.5 * fs
 #Nyquist becomes 5
 
-# Look up this function what kind of filter is this?
-b, a = butter(order, corner/ nyq, btype='low', analog=False)
+b, a = butter(order, corner/nyq, btype='low', analog=False)
 
 dataLP = lfilter(b,a,dataDec)
-#lfilter is a low pass butterworth filter
+#lfilter is a low pass butterworth filter - see description above
 
 fig = plt.figure(1)
 plt.plot(t,dataLP)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Decimated Acceleration (m/s^2)')
+plt.title('Decimated Acceleration with Low Pass Corner of 1 Hz')
 plt.savefig('AccelExample7.jpg')
-#plt.show()
 plt.close()
 
+## START HERE.  ONCE DONE WITH DETAILED ANALYSIS OF THE SCRIPT, GO BACK TO SEE
+# COMPARISONS OF WHAT WE'VE DONE.
 
-#  Okay last part  Why don't we figure out what the PSD is?
+
+# Okay last part  
+# Why don't we figure out what the PSD is?
 # f is the frequency vector and P is the power
 fs= 100.
 f, P = welch(data, fs, nperseg = 512)
