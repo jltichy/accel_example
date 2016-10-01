@@ -232,30 +232,37 @@ dataDisplacement = cumtrapz(dataVelocity,x=None, dx=0.01)
 # x=None means that the function should use spacing dx between consecutive
 # elements of "data".  dx is then defined to be 0.01.
 
-## START HERE.
-
-
 # Check what cumtrapz returns.  Notice we need a different time vector.
 # cumtrapz computes an approximation of the cumulative integral of 
 #Y via the trapezoidal method with unit spacing
+# Since cumtrapz uses spacing of 0.01, we'll need to change the time vectors.
+
 tv = np.arange(len(dataVelocity))/100.
 td = np.arange(len(dataDisplacement))/100.
 
 fig = plt.figure(1)
 plt.subplot(2,1,1)
 plt.plot(tv,dataVelocity)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Velocity (m/s)')
 plt.subplot(2,1,2)
 plt.plot(td,dataDisplacement)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Displacement (m)')
 plt.savefig('AccelExample5.jpg')
-#plt.show()
 plt.close()
 
-# Note most accelerometers don't integrate to displacement well because of noise
+# Note most accelerometers don't integrate to displacement well because of noise.
+# That is the trail that you see in "AccelExample5"
 
 # What happens to the length and the Nyquist when we decimate by a factor of 10?
 #decimate essentially means divide by, so if our sampling frequency is 100 and
 #we decimate by 10, then our sampling frequency is 10
 #When we decimate by 10, the Nyquist then becomes 5 Hz.
+
+# Side note - there are multiple ways to decimate.  Taking every 10th data point,
+# as we have done here, is just one method.
+
 dataDec = decimate(data,10)
 print('Here is dataDec len: ' + str(len(dataDec))) 
 #Output: Here is dataDec len: 8557
@@ -266,14 +273,10 @@ print('Here is dataDec len: ' + str(len(dataDec)))
 t = np.arange(len(dataDec))/10.
 fig = plt.figure(1)
 plt.plot(t,dataDec)
+plt.xlabel('Time (seconds)')
+plt.ylabel('Decimated Acceleration (m/s^2)')
 plt.savefig('AccelExample6.jpg')
-#plt.show()
 plt.close()
-
-
-## Ask Adam about this part - Is the idea to low-pass dataDec (as the acceleration), or the displacement or velocity?
-
-
 
 # If I wanted to low-pass dataDec what would I need to change in my filter parameters?
 # Answer - 
@@ -282,10 +285,13 @@ b,a = butter(order, corner_dec/nyq, btype='high', analog=False)
 dataDec = lfilter(b,a,dataDec)
 fig = plt.figure(1)
 plt.plot(t,dataDec)
+plt.title('Decimated Acceleration with Low Pass Corner of 0.1 Hz')
+plt.xlabel('Time (seconds)')
+plt.ylabel('Decimated Acceleration (m/s^2)')
 plt.savefig('AccelExample6a.jpg')
-#plt.show()
 plt.close()
 
+## START HERE. - REMEMBER TO ADD TITLES TO ALL ABOVE PLOTS.
 
 # Now we want to low-pass the data at 1 Hz
 # Define some parameters so we know what is going on
