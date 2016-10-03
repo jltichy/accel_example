@@ -336,52 +336,64 @@ plt.title('Decimated Acceleration with Low Pass Corner of 1 Hz')
 plt.savefig('AccelExample7.jpg')
 plt.close()
 
-## START HERE.  ONCE DONE WITH DETAILED ANALYSIS OF THE SCRIPT, GO BACK TO SEE
+# ONCE DONE WITH DETAILED ANALYSIS OF THE SCRIPT, GO BACK TO SEE
 # COMPARISONS OF WHAT WE'VE DONE.
 
 
 # Okay last part  
 # Why don't we figure out what the PSD is?
 # f is the frequency vector and P is the power
-fs= 100.
+fs= 100. # Again, this is the sampling frequency
 f, P = welch(data, fs, nperseg = 512)
-#welch's method computer an esimate of the power spectral density by dividing
-#the data into overlapping segments.
+# Welch's method - compute an esimate of the power spectral density by dividing
+# the data into overlapping segments.
+# nperseg is the length of each segment.  The default is 256 but we set it to
+# 512 here.
 
-# The units of P are (m/s^2)^2 /Hz confusing
+# The units of P are (m/s^2)^2 /Hz, which is confusing
 fig = plt.figure(1)
 plt.plot(f,P)
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Accelerometer Power (m/s^2)^2 /Hz')
+plt.title('PSD of Original Accelerometer Data')
 plt.savefig('AccelExample8.jpg')
-#plt.show()
 plt.close()
 
 # These units are messy, so if we use Hz=1/sec, we can simplify the units to
 # m^2/s^3 but maybe this doesn't really make sense either.
 
-# Yuck that is hard to read why not plot it on a log scale
+# Yuck. That is hard to read. Why not plot it on a log scale?
 fig = plt.figure(1)
 plt.semilogx(f,P)
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Accelerometer Power (m/s^2)^2 /Hz')
+plt.title('Semi-Log PSD of Original Accelerometer Data')
 plt.savefig('AccelExample9.jpg')
-#plt.show()
 plt.close()
 
-# Better, but we could convert it to dB 10*log10(P)
-PdB = 10.*np.log10(P)
+# Better, but we could convert it to dB with the following eqn: 10*log10(P)?
+PdB = 10.*np.log10(P) # This will be the power in decibels.
 fig = plt.figure(1)
 plt.semilogx(f,PdB)
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Accelerometer Power (dB)')
+plt.title('Semi-Log PSD of Original Accelerometer Data, displayed in Decibels')
 plt.savefig('AccelExample10.jpg')
-#plt.show()
 plt.close()
 
-# Okay, what if we compute the power for our Low-pass data
+# Okay, what if we compute the power for our Low-pass data?
 fLP, PLP = welch(dataLP,10., nperseg = 512)
 
 fig = plt.figure(1)
 plt.semilogx(f,PdB)
 plt.semilogx(fLP, 10*np.log10(PLP)) #convert to decibels here.
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Low Pass Accelerometer Power (dB)')
+plt.title('Semi-Log PSD of Low-Pass Accelerometer Data, displayed in Decibels')
 plt.savefig('AccelExample11.jpg')
-#plt.show()
 plt.close()
+
+# START HERE. NOTE NOTES ON LINE 339.
 
 # Which is PLP and which is PdB?  Hint one of them should not have as much power past 10Hz 
 # Why do they have different frequencies?
