@@ -385,44 +385,54 @@ plt.close()
 fLP, PLP = welch(dataLP,10., nperseg = 512)
 
 fig = plt.figure(1)
-plt.semilogx(f,PdB)
-plt.semilogx(fLP, 10*np.log10(PLP)) #convert to decibels here.
+plt.semilogx(f,PdB, label='Original Data')
+plt.semilogx(fLP, 10*np.log10(PLP), label='Low-Pass Data') #convert to decibels here.
+plt.legend(loc='upper right')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Low Pass Accelerometer Power (dB)')
-plt.title('Semi-Log PSD of Low-Pass Accelerometer Data, displayed in Decibels')
+plt.title('Semi-Log PSD of Original and Low-Pass Accelerometer Data, displayed in Decibels')
 plt.savefig('AccelExample11.jpg')
 plt.close()
 
-# START HERE. NOTE NOTES ON LINE 339.
+# Which is PLP and which is PdB?  Hint: One of them should not have as much 
+# power past 10Hz.
+# Answer - The green line is the low-pass data (PLP) and the blue line is the 
+# original data (PdB).  It's beneficial to see the two lines on one plot.
 
-# Which is PLP and which is PdB?  Hint one of them should not have as much power past 10Hz 
 # Why do they have different frequencies?
 # PLP is the PSD of the low pass data
 # PdB is the PSD in decibels of the original data
 
-# Okay one last exercise.  What happens when we compute the PSD of our velocity trace?
+# Okay one last exercise.  What happens when we compute the PSD of our velocity
+# trace?
 # You get units of (m/s)^2/Hz if you take the PSD of velocity data.
 
 fV, PV = welch(dataVelocity, 100., nperseg = 512)
 
-# What are the units of PV?  I'm not sure about this either.
-# Adam says that you get units of (m/s)^2/Hz if you take the PSD of velocity data.
+# What are the units of PV? (m/s)^2/Hz
+
 # Side note - the units for the PSD of acceration are (m/s^2)^2/Hz
 
-# The PSD units of velocity data are (m/2)^2/Hz, so if we substitute 1/s for Hz,
-# we get m^2/s
+# For an exercise, let's see what happens if we were to take the PSD of 
+# displacement data.  I think it would be m^2*s.  Ask Adam if this is right.
+# Yes, this is right.  Another way to display the units is m^2/Hz.  I think
+# it is better to use the Hz version to be consistent across displacement,
+# velocity, and acceleration.
 
-# For an exercise, let's see what happens if we were to take the PSD of displacement
-# data.  I think it would be m^2*s.  Ask Adam if this is right.
-
-# Units: url: http://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.signal.welch.html
+# Units: 
+# http://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.signal.welch.html
 
 fig = plt.figure(1)
-plt.semilogx(fV, 10*np.log10(PV)) #Here we convert to decibels again.
-plt.semilogx(f,PdB)
+plt.semilogx(fV, 10*np.log10(PV), label='Velocity Trace') #Here we convert to decibels again.
+plt.semilogx(f,PdB, label='Acceleration Trace')
+plt.legend(loc='upper right')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Power (dB)')
+plt.title('Semi-Log PSD of Velocity and Acceleration, displayed in Decibels')
 plt.savefig('AccelExample12.jpg')
-#plt.show()
 plt.close()
+
+# START HERE. NOTE NOTES ON LINE 339.
 
 # What happens if we multiply PV by omega^2=(2*pi*f)^2?
 PA = 10.*np.log10(PV*(2*np.pi*fV)**2)
