@@ -432,25 +432,28 @@ plt.title('Semi-Log PSD of Velocity and Acceleration, displayed in Decibels')
 plt.savefig('AccelExample12.jpg')
 plt.close()
 
-# START HERE. NOTE NOTES ON LINE 339.
-
 # What happens if we multiply PV by omega^2=(2*pi*f)^2?
 PA = 10.*np.log10(PV*(2*np.pi*fV)**2)
-#we get angular frequency.  This gives the normalized frequency for PSD.
+# We get angular frequency.  This gives the normalized frequency for PSD.
+# It's a convention thing.  Some groups use angular fequency.  It's best to
+# just be consistent, no matter which convention you choose.
 # The values are a little more familiar and the data is easier to understand.
 # It's a convention to see how fast something is spinning.
-#units = (2pi*m/s)^2
+# units = (2pi*m/s)^2
 
 # What are the units of PA?  Why are these so similar?  
-# so similar to what?
-
-#units = (2pi*m/s)^2
+# accelerometer power units = (m/s^2)^2 /Hz
+# velocity power units = (m/s)^2/Hz
+# displacement power units = m^2/Hz
 
 fig = plt.figure(1)
-plt.semilogx(fV,PA)
-plt.semilogx(f,PdB)
+plt.semilogx(fV,PA, label='Angular Frequency??')
+plt.semilogx(f,PdB, label='Acceleration Trace')
+plt.legend(loc='upper right')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Power')
+plt.title('Semi-Log PSD of Acceleration, comparing Angular Freq. and Decibels')
 plt.savefig('AccelExample13.jpg')
-plt.show()
 plt.close()
 
 # Take a look at 106 in the functional relationships
