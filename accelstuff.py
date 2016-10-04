@@ -447,23 +447,36 @@ PA = 10.*np.log10(PV*(2*np.pi*fV)**2)
 # displacement power units = m^2/Hz
 
 fig = plt.figure(1)
-plt.semilogx(fV,PA, label='Angular Frequency??')
-plt.semilogx(f,PdB, label='Acceleration Trace')
+plt.semilogx(fV,PA, label='Velocity PSD * omega')
+plt.semilogx(f,PdB, label='Acceleration Trace PSD')
 plt.legend(loc='upper right')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Power')
-plt.title('Semi-Log PSD of Acceleration, comparing Angular Freq. and Decibels')
+plt.title('Semi-Log PSD, comparing Acceleration PSD to Velocity PSD times omega')
 plt.savefig('AccelExample13.jpg')
 plt.close()
+
+# So to recap:
+# You took the power spectra of the velocity.  You multiplyed it by omega and 
+# got the same thing as computing the power spectra of the acceleration.
+
+# But it's not exactly the same.
+# That's where I'm confused.
+
+# The "exactly the same" comes from precision and cumtrapz issues.
+# When you integrate a spectra you introduce noise.
+# So it is fairly close, but up to some differences in the approach.
+
+# Ahh.  Got it.  Thanks.
 
 # Take a look at 106 in the functional relationships
 # https://en.wikipedia.org/wiki/Fourier_transform
 
-# Why do we do (2*pi*f)^2 and not just (2*pi*f)?  Look at what Welch outputs
+# Why do we do (2*pi*f)^2 and not just (2*pi*f)?  Look at what Welch outputs.
 # This is a bit different from the FFFFT
 
 # We square the multiplier because it is acceleration, not velocity.
 
 #End Note:
 # The units of angular frequency for acceleration data are (2*pi*m)^2/s^4
-# while the units of angular frequency for verlocity data are (2*pi*m/s)^2
+# while the units of angular frequency for velocity data are (2*pi*m/s)^2
