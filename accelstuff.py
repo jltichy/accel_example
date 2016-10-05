@@ -336,9 +336,6 @@ plt.title('Decimated Acceleration with Low Pass Corner of 1 Hz')
 plt.savefig('AccelExample7.jpg')
 plt.close()
 
-# ONCE DONE WITH DETAILED ANALYSIS OF THE SCRIPT, GO BACK TO SEE
-# COMPARISONS OF WHAT WE'VE DONE.
-
 
 # Okay last part  
 # Why don't we figure out what the PSD is?
