@@ -74,3 +74,21 @@ plt.legend()
 plt.subplots_adjust(hspace=0.35)
 plt.show()
 plt.savefig('Plot')
+
+plt.clf()   # Clear figure
+plt.close() # Close a figure window
+
+# Let's do the example from the scipy documentation:
+from scipy import signal
+d, c = signal.butter(4, 100, 'low', analog=True)
+w, h = signal.freqs(d, c)
+plt.plot(w, 20 * np.log10(abs(h)))
+plt.xscale('log')
+plt.title('Butterworth filter frequency response')
+plt.xlabel('Frequency [radians / second]')
+plt.ylabel('Amplitude [dB]')
+plt.margins(0, 0.1)
+plt.grid(which='both', axis='both')
+plt.axvline(100, color='green') # cutoff frequency
+plt.show()
+plt.savefig('Plot2')
