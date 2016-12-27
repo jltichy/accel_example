@@ -39,6 +39,10 @@ cutoff = 3.667  # desired cutoff frequency of the filter, Hz
 # Get the filter coefficients so we can check its frequency response.
 b, a = butter_lowpass(cutoff, fs, order)
 
+# Now we can print these because they have been called.
+print b
+print a
+
 # Plot the frequency response. The data is regularly sampled.
 w, h = freqz(b, a, worN=8000) # This is used to generate the freq. response.
 # Note that worN = 8000 is a random number used with freqz to create a smooth
