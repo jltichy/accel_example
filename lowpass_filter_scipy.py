@@ -3,21 +3,33 @@
 import numpy as np
 from scipy.signal import butter, lfilter, freqz
 import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt # Do not do this prior to calling use()
+matplotlib.use('Agg') # Necessary for Cloud9
+import matplotlib.pyplot as plt
 
+# The Butterworth filter is a type of signal processing filter designed to have 
+# as flat a frequency response as possible in the passband. It is also referred 
+# to as a maximally flat magnitude filter.
 
-def butter_lowpass(cutoff, fs, order=5):
-    nyq = 0.5 * fs
+def butter_lowpass(cutoff, fs, order=5): 
+    nyq = 0.5 * fs # The Nyquist Frequency is half the sampling rate.
     normal_cutoff = cutoff / nyq
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    # b is the numerator
+    # a is the denominator
     return b, a
+
+# This doesn't seem to be working.  Let's try it later.
+#print "Numerator: %d" % b
+#print "Denominator: %d" % a
 
 def butter_lowpass_filter(data, cutoff, fs, order=5):
     b, a = butter_lowpass(cutoff, fs, order=order)
     y = lfilter(b, a, data)
     return y
 
+# I don't know why this isn't working...
+#print b
+#print a 
 
 # Filter requirements.
 order = 6
@@ -27,8 +39,10 @@ cutoff = 3.667  # desired cutoff frequency of the filter, Hz
 # Get the filter coefficients so we can check its frequency response.
 b, a = butter_lowpass(cutoff, fs, order)
 
-# Plot the frequency response.
-w, h = freqz(b, a, worN=8000)
+# Plot the frequency response. The data is regularly sampled.
+w, h = freqz(b, a, worN=8000) # This is used to generate the freq. response.
+# Note that worN = 8000 is a random number used with freqz to create a smooth
+# plot
 plt.subplot(2, 1, 1)
 plt.plot(0.5*fs*w/np.pi, np.abs(h), 'b')
 plt.plot(cutoff, 0.5*np.sqrt(2), 'ko')
@@ -59,3 +73,4 @@ plt.legend()
 
 plt.subplots_adjust(hspace=0.35)
 plt.show()
+plt.savefig('Plot')
