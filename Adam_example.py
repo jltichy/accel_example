@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+#We make a filter have some data going into the system and have some data going out of the system
+#By changing around the different filter parameters you have different inputs to outputs
 import numpy as np
 
 from scipy.signal import butter, lfilter, freqz
