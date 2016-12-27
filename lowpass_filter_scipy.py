@@ -2,7 +2,9 @@
 
 import numpy as np
 from scipy.signal import butter, lfilter, freqz
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt # Do not do this prior to calling use()
 
 
 def butter_lowpass(cutoff, fs, order=5):
