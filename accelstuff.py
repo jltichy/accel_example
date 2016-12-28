@@ -291,12 +291,12 @@ plt.close()
 
 # If I wanted to low-pass dataDec what would I need to change in my filter parameters?
 # Answer - 
-corner_dec = 0.1
+corner_dec = 0.001
 b,a = butter(order, corner_dec/nyq, btype='high', analog=False)
 dataDec2 = lfilter(b,a,dataDec)
 fig = plt.figure(1)
 plt.plot(t,dataDec2)
-plt.title('Decimated Acceleration with Low Pass Corner of 0.1 Hz')
+plt.title('Decimated Acceleration with Low Pass Corner of 0.001 Hz')
 plt.xlabel('Time (seconds)')
 plt.ylabel('Decimated Acceleration (m/s^2)')
 plt.savefig('AccelExample6a.jpg')
@@ -309,7 +309,7 @@ plt.subplot(2,1,1)
 plt.plot(t,dataDec)
 plt.xlabel('Time (seconds)')
 plt.ylabel('Decimated Acceleration (m/s^2)')
-plt.title('Decimated Accel and Decimated Accel with Low Pass Corner of 0.1 Hz')
+plt.title('Decimated Accel and Decimated Accel with Low Pass Corner of 0.001 Hz')
 plt.subplot(2,1,2)
 plt.plot(t,dataDec2)
 plt.xlabel('Time (seconds)')
