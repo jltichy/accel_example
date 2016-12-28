@@ -10,6 +10,38 @@ import matplotlib.pyplot as plt
 # as flat a frequency response as possible in the passband. It is also referred 
 # to as a maximally flat magnitude filter.
 
+# def butter_lowpass(cutoff, fs, order=5): 
+#     nyq = 0.5 * fs # The Nyquist Frequency is half the sampling rate.
+#     normal_cutoff = cutoff / nyq
+#     b, a = butter(order, normal_cutoff, btype='low', analog=False)
+#     # b is the numerator
+#     # a is the denominator
+#     return b, a
+    
+# # Let's try to change the order of the filter:
+# def butter_lowpass(cutoff, fs, order=0.0000000010000000): 
+#     nyq = 0.5 * fs # The Nyquist Frequency is half the sampling rate.
+#     normal_cutoff = cutoff / nyq
+#     b, a = butter(order, normal_cutoff, btype='low', analog=False)
+#     # b is the numerator
+#     # a is the denominator
+#     return b, a
+# # It doesn't seem like this does anything.
+
+# # Let's try to change the cutoff:
+# def butter_lowpass(cutoff, fs, order=5): 
+#     nyq = 0.5 * fs # The Nyquist Frequency is half the sampling rate.
+#     normal_cutoff = cutoff/50 / nyq
+#     b, a = butter(order, normal_cutoff, btype='low', analog=False)
+#     # b is the numerator
+#     # a is the denominator
+#     return b, a
+# # When we change the cutoff, it shifts the curve to the right or left.  If the 
+# #cutoff is huge, then the plot gets shifted to the right and it the cutoff is 
+# #really small, then the plot gets shifted to the left.  The line is hard to see
+# #when the cutoff is very low.
+
+# Let's go back to the original:
 def butter_lowpass(cutoff, fs, order=5): 
     nyq = 0.5 * fs # The Nyquist Frequency is half the sampling rate.
     normal_cutoff = cutoff / nyq
@@ -17,7 +49,7 @@ def butter_lowpass(cutoff, fs, order=5):
     # b is the numerator
     # a is the denominator
     return b, a
-
+    
 # This doesn't seem to be working.  Let's try it later.
 #print "Numerator: %d" % b
 #print "Denominator: %d" % a
@@ -31,6 +63,21 @@ def butter_lowpass_filter(data, cutoff, fs, order=5):
 #print b
 #print a 
 
+# # Filter requirements.
+# order = 6
+# fs = 30.0       # sample rate, Hz
+# cutoff = 3.667  # desired cutoff frequency of the filter, Hz
+
+# # Let's try to change the order at this step:  Maybe it will make a difference.
+# # Filter requirements.
+# order = 1
+# fs = 30.0       # sample rate, Hz
+# cutoff = 3.667  # desired cutoff frequency of the filter, Hz
+# # Yes, it makes a difference here.  The vectors for the numerator and denominator
+# #are much larger when make a larger order and the vectors are much shorter when
+# #the order is smaller.
+
+# OK.  Let's go back to the original.
 # Filter requirements.
 order = 6
 fs = 30.0       # sample rate, Hz
@@ -72,12 +119,25 @@ plt.subplot(2, 1, 2)
 plt.plot(t, data, 'b-', label='data')
 plt.plot(t, y, 'g-', linewidth=2, label='filtered data')
 plt.xlabel('Time [sec]')
+plt.ylabel('')
 plt.grid()
 plt.legend()
 
 plt.subplots_adjust(hspace=0.35)
 plt.show()
 plt.savefig('Plot')
+
+
+# Let's try to plot the phase response in addition to the amplitude response,
+#because that's all we have so far.
+plt.clf()   # Clear figure
+plt.close() # Close a figure window
+angles = np.unwrap(np.angle(h))
+plt.plot(w, angles, 'g')
+plt.xlabel('Frequency [Hz]')
+plt.ylabel('Phase [Radians]')
+plt.savefig('Phase Plot')
+
 
 plt.clf()   # Clear figure
 plt.close() # Close a figure window
