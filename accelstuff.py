@@ -228,6 +228,7 @@ print('The min peak is ' + str(minP))
 
 # So the peak to peak would be
 print('P to P: ' + str(abs(minP) + abs(maxP)))
+print('This is the peak to peak acceleration.')
 # Output: P to P: 0.0720751
 
 # What about converting to m/s or m?  The function cumtrapz calculates the 
@@ -266,7 +267,7 @@ plt.close()
 
 # What happens to the length and the Nyquist when we decimate by a factor of 10?
 #decimate essentially means divide by, so if our sampling frequency is 100 and
-#we decimate by 10, then our sampling frequency is 10
+#we decimate by 10, then our sampling frequency is 10.
 #When we decimate by 10, the Nyquist then becomes 5 Hz.
 
 # Side note - there are multiple ways to decimate.  Taking every 10th data point,
