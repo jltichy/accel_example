@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import numpy as np
+import numpy as np # This is the package needed for functions.
 from scipy.signal import butter, lfilter, freqz, detrend, decimate, welch
 from scipy.integrate import cumtrapz
 import math
@@ -24,16 +24,15 @@ for line in f: # for each line in data, append a string of information.
 # The data is sampled at 100 Hz.  What is the time length of the file?
 # One Hz is 1/sec, so that means we are taking 100 samples every second.
 print('Here is the time span: ' + str(float(len(data))/100.) + ' seconds')
-
-# Result - Here is the time span: 855.7 seconds
-# at 100 samples per second, that's 85,570 samples.
+# Here is the time span: 855.7 seconds
 
 # Let's print the number of samples:
 print('There are ' + str(float(len(data))) + ' samples.')
 # Result - There are 85570.0 samples.
 
 # Accelerometers output a voltage which is proportional to acceleration.
-# The acceleration is then digitized into counts.
+# The acceleration is then digitized into counts.  This is done through a
+# device called a digitizer
 
 # If the digitizer is a 24 bit digitizer with a 40 Volt peak to peak range,
 # then the sensitivity is 2^24/40 which is counts/V.
@@ -92,7 +91,8 @@ order = 2 # Order is the order of the filter - What does this mean??
 fs = 100.0 # fs is the sampling rate, in Hz
 
 corner = 10. # corner is the frequency cut off, so we will keep all data less
-# than 10 Hz and everything greater than 10 Hz will be attenuated.
+# than 10 Hz and everything greater than 10 Hz will be attenuated.  Remember that
+# the higher the order, the steeper the data will drop off, at this 10 Hz corner.
 
 # If my sampling rate is 100 Hz, what is my nyquist? Nyquist is half the
 # sampling rate, so it's 50 Hz in this case
@@ -101,7 +101,7 @@ nyq = 0.5 * fs
 # Look up this function. What kind of filter is this?
 
 # Butterworth Filter - a signal processing filter that aims for  
-# as flat a frequency response as possible in the passband. 
+# as flat a frequency response as possible in the passband (aka band pass). 
 b, a = butter(order, corner/nyq, btype='low', analog=False)
 
 # b is the numerator and a is the denominator of the polynomials in the filter.
@@ -153,13 +153,16 @@ plt.title('Low Pass Acceleration at Corner of 0.1 Hz. vs. Time')
 plt.savefig('AccelExample2a.jpg')
 plt.close()
 # Even more high frequency data has been attenuated and now we are looking at
-# only very low frequencies.
+# only very low frequencies.  The data drops off at the 0.1 Hz corner in this 
+# case.  Before, the corner was set to 10 Hz.  Again, the order of the filter
+# determines how steeply the data drops off at the defined corner.  The higher
+# the order of the filter, the steeper it drops off.
 
 # The spike at the front is called filter ringing and is annoying.
 # We can get rid of that by applying a taper.
 taper = np.hanning(len(data))
 # The Hanning window is used to select a subset of samples.  It minimizes 
-# aliasing (distortion).
+# aliasing (distortion).  In this case, the distortion is called filter ringing.
 
 dataLP = lfilter(b,a,data*taper)
 
