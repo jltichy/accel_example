@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 
-import numpy as np
-from scipy.signal import butter, lfilter, freqz
-import matplotlib
-matplotlib.use('Agg') # Necessary for Cloud9
+import numpy as np # These are the packages necessary for the functions of interest.
+from scipy.signal import butter, lfilter, freqz # Filters for the analysis.
+import matplotlib # To be used for plotting data.
+matplotlib.use('Agg') # Necessary for Cloud9.
 import matplotlib.pyplot as plt
 
 # The Butterworth filter is a type of signal processing filter designed to have 
 # as flat a frequency response as possible in the passband. It is also referred 
 # to as a maximally flat magnitude filter.
 
+# Here is the original code - We will modify it below, which is why it is commented.
 # def butter_lowpass(cutoff, fs, order=5): 
 #     nyq = 0.5 * fs # The Nyquist Frequency is half the sampling rate.
 #     normal_cutoff = cutoff / nyq
@@ -50,18 +51,16 @@ def butter_lowpass(cutoff, fs, order=5):
     # a is the denominator
     return b, a
     
-# This doesn't seem to be working.  Let's try it later.
-#print "Numerator: %d" % b
-#print "Denominator: %d" % a
+# If we try to print b and a at this point, we can't, since b and a are simply
+#returned as of now.  We'll need to call them and use them before they can be
+#printed.
 
 def butter_lowpass_filter(data, cutoff, fs, order=5):
     b, a = butter_lowpass(cutoff, fs, order=order)
     y = lfilter(b, a, data)
     return y
-
-# I don't know why this isn't working...
-#print b
-#print a 
+    
+# Again, y is simply returned, so it cannot be printed yet.
 
 # # Filter requirements.
 # order = 6
@@ -79,8 +78,10 @@ def butter_lowpass_filter(data, cutoff, fs, order=5):
 
 # OK.  Let's go back to the original.
 # Filter requirements.
-order = 6
-fs = 30.0       # sample rate, Hz
+order = 6  # When there is a larger order, then the curve will drop off at a 
+#steeper rate.
+fs = 30.0       # sample rate, Hz (Again, remember that Nyquist is half the
+#sampling rate, so it would be 15 Hz. here.)
 cutoff = 3.667  # desired cutoff frequency of the filter, Hz
 
 # Get the filter coefficients so we can check its frequency response.
@@ -89,11 +90,19 @@ b, a = butter_lowpass(cutoff, fs, order)
 # Now we can print these because they have been called.
 print b
 print a
+#b is the numerator and a is the denominator.
+
+# Freqz will Compute the frequency response of a digital filter.
+# w returns the normalized frequencies at which h was computed, in radians/sample.
+# h is the frequency response.
 
 # Plot the frequency response. The data is regularly sampled.
 w, h = freqz(b, a, worN=8000) # This is used to generate the freq. response.
-# Note that worN = 8000 is a random number used with freqz to create a smooth
-# plot
+# Note that worN = 8000 is a random number used with freqz to create a smooth plot
+
+## start here ##
+
+
 plt.subplot(2, 1, 1)
 plt.plot(0.5*fs*w/np.pi, np.abs(h), 'b')
 plt.plot(cutoff, 0.5*np.sqrt(2), 'ko')
@@ -102,7 +111,7 @@ plt.xlim(0, 0.5*fs)
 plt.title("Lowpass Filter Frequency Response")
 plt.xlabel('Frequency [Hz]')
 plt.grid()
-
+plt.savefig('Lowpass Filter Frequency Response')
 
 # Demonstrate the use of the filter.
 # First make some data to be filtered.
