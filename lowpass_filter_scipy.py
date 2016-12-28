@@ -131,9 +131,7 @@ t = np.linspace(0, T, n, endpoint=False)
 data = np.sin(1.2*2*np.pi*t) + 1.5*np.cos(9*2*np.pi*t) + 0.5*np.sin(12.0*2*np.pi*t)
 # I think this data is just an example, but I don't really understand why
 #we're adding three trig functions.  The 1.2, 9, and 12 affect the magnitudes.
-
-## start here ##
-# Figure out what is happening on line 131.
+#This is just sample data - it has multiple frequencies to give a good example.
 
 # Filter the data, and plot both the original and filtered signals.
 y = butter_lowpass_filter(data, cutoff, fs, order)
@@ -149,26 +147,37 @@ plt.legend()
 plt.subplots_adjust(hspace=0.35)
 plt.show()
 plt.savefig('Plot')
-
+# OK.  Here's what we're seeing in this second plot.  BTW, the first plot shows
+#what the filter will do.  Namely, at the cutoff, the signal will attenuate.  OK.
+#The high frequency data (blue) gets attenuated and only the low frequency data 
+#(green) is seen.  However, if we squint at the blue and green curves, we can see
+#that there is a phase shift.  We should plot the phase to see what's going on.
 
 # Let's try to plot the phase response in addition to the amplitude response,
 #because that's all we have so far.
 plt.clf()   # Clear figure
 plt.close() # Close a figure window
+
 angles = np.unwrap(np.angle(h))
 plt.plot(w, angles, 'g')
 plt.xlabel('Frequency [Hz]')
 plt.ylabel('Phase [Radians]')
 plt.savefig('Phase Plot')
-
+# The previous figure (the one that showed what the filter would do, plus the blue
+#and green curves) was just showing what would happen to the amplitude.  This figure
+#shows what happens to the phase at different frequencies.
 
 plt.clf()   # Clear figure
 plt.close() # Close a figure window
 
 # Let's do the example from the scipy documentation:
-from scipy import signal
+from scipy import signal # This is the signal processing toolbox
 d, c = signal.butter(4, 100, 'low', analog=True)
+# Remember that this butterworth filter returns the numerator (d) and denominator 
+#(c) polynomials
 w, h = signal.freqs(d, c)
+# w (omega) returns the normalized frequencies at which h was computed, in radians/sample.
+# h is the frequency response.
 plt.plot(w, 20 * np.log10(abs(h)))
 plt.xscale('log')
 plt.title('Butterworth filter frequency response')
