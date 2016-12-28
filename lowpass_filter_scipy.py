@@ -100,9 +100,6 @@ print a
 w, h = freqz(b, a, worN=8000) # This is used to generate the freq. response.
 # Note that worN = 8000 is a random number used with freqz to create a smooth plot
 
-## start here ##
-
-
 plt.subplot(2, 1, 1)
 plt.plot(0.5*fs*w/np.pi, np.abs(h), 'b')
 plt.plot(cutoff, 0.5*np.sqrt(2), 'ko') # This puts a dot at the cutoff point.
@@ -112,6 +109,9 @@ plt.title("Lowpass Filter Frequency Response")
 plt.xlabel('Frequency [Hz]')
 plt.grid()
 plt.savefig('Lowpass Filter Frequency Response')
+# This plot shows what the filter does, which is why it doesn't have a label
+#on the y-axis.  For frequencies before the cutoff, the signal will be preserved
+#but for frequencies after the cutoff, the signal will attenuate.
 
 # Demonstrate the use of the filter.
 # First make some data to be filtered.
@@ -129,6 +129,11 @@ print n
 t = np.linspace(0, T, n, endpoint=False)
 # "Noisy" data.  We want to recover the 1.2 Hz signal from this.
 data = np.sin(1.2*2*np.pi*t) + 1.5*np.cos(9*2*np.pi*t) + 0.5*np.sin(12.0*2*np.pi*t)
+# I think this data is just an example, but I don't really understand why
+#we're adding three trig functions.  The 1.2, 9, and 12 affect the magnitudes.
+
+## start here ##
+# Figure out what is happening on line 131.
 
 # Filter the data, and plot both the original and filtered signals.
 y = butter_lowpass_filter(data, cutoff, fs, order)
