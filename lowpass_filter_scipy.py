@@ -105,9 +105,9 @@ w, h = freqz(b, a, worN=8000) # This is used to generate the freq. response.
 
 plt.subplot(2, 1, 1)
 plt.plot(0.5*fs*w/np.pi, np.abs(h), 'b')
-plt.plot(cutoff, 0.5*np.sqrt(2), 'ko')
-plt.axvline(cutoff, color='k')
-plt.xlim(0, 0.5*fs)
+plt.plot(cutoff, 0.5*np.sqrt(2), 'ko') # This puts a dot at the cutoff point.
+plt.axvline(cutoff, color='k') # This draws a vertical line at the cutoff point.
+plt.xlim(0, 0.5*fs) # Set the axis.
 plt.title("Lowpass Filter Frequency Response")
 plt.xlabel('Frequency [Hz]')
 plt.grid()
@@ -116,7 +116,16 @@ plt.savefig('Lowpass Filter Frequency Response')
 # Demonstrate the use of the filter.
 # First make some data to be filtered.
 T = 5.0         # seconds
-n = int(T * fs) # total number of samples
+n = int(T * fs) # total number of samples # I think int converts the value to integers.
+
+print n
+# n returns 150
+
+# Let's create a vector of evenly spaced numbers over a specified interval.
+# It will start at 0.
+# It will stop at T, which is 5.0 in this case.
+# It will have n values, which is 150 in this case.
+# endpoint = False means that it will stop before the very end.
 t = np.linspace(0, T, n, endpoint=False)
 # "Noisy" data.  We want to recover the 1.2 Hz signal from this.
 data = np.sin(1.2*2*np.pi*t) + 1.5*np.cos(9*2*np.pi*t) + 0.5*np.sin(12.0*2*np.pi*t)
